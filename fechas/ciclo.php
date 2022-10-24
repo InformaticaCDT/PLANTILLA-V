@@ -23,11 +23,3 @@ while ($date <= $date1) {
 	echo date_format($date,"Y")."<br>";
 }
 ?>
-$date1=new DateTime($fila['ingreso']);
-$date2=new DateTime($fechaActual);
-
-while ($date1 <= $date2) {
-	$result= date_add($date1,date_interval_create_from_date_string("6 month"));
-	echo date_format($date1,"Y-m-d")."<br>";
-
-}

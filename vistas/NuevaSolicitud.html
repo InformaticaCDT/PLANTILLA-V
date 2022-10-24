@@ -1,0 +1,435 @@
+
+<?php require_once('../conn/connect.php')?>
+
+
+
+<!DOCTYPE html>
+<?php
+session_start();
+?>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Nueva solicitud de vacaciones</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+  rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+  <!--<script src="../js/ajax_search.js"></script>-->
+  <style>
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  /*table, td, th {
+    border: 1px solid #154360;
+    padding: 5px;
+}*/
+
+select {
+        width: 100%;
+        margin: 0px;
+        height: 50%;
+    }
+    select:focus {
+        min-width: 150px;
+        width: 100%;
+    }
+
+
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  div
+  #content-wrapper {
+    background-image: url('../img/fondo20.png');
+  }
+
+  </style>
+
+
+</head>
+<script>
+function buscar(str) {
+  if (str=="") {
+    document.getElementById("txtHint").innerHTML="";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("txtHint").innerHTML=this.responseText;
+      var table = document.getElementById('mytable_salida');
+									var val0 =table.rows[1].cells[0].innerHTML;
+	              	document.getElementById("s_fingreso").value = val0;
+                  var val1 =table.rows[1].cells[1].innerHTML;
+                  document.getElementById("s_antiguedad").value = val1;
+                  var val2=table.rows[1].cells[2].innerHTML;
+                  document.getElementById("s_dcpp").value = val2;
+									var val3 =table.rows[1].cells[3].innerHTML;
+	              	document.getElementById("s_dc").value = val3;
+									var val4 =table.rows[1].cells[4].innerHTML;
+	              	document.getElementById("s_nombrec").value = val4;
+									var val5 =table.rows[1].cells[5].innerHTML;
+	              	document.getElementById("s_categoria").value = val5;
+                  var val6 =table.rows[1].cells[6].innerHTML;
+	              	document.getElementById("año").value = val6;
+                  var val7 =table.rows[1].cells[7].innerHTML;
+	              	document.getElementById("periodo").value = val7;
+                  var val8 =table.rows[1].cells[8].innerHTML;
+                  document.getElementById("s_ddisponibles").value = val8;
+
+
+
+    }
+  }
+  xmlhttp.open("GET","../php/getots_sol.php?q="+str,true);
+  xmlhttp.send();
+}
+</script>
+
+
+
+<body id="page-top">
+
+  <div style="width:100%; "><img style="width:100%;"  src="../img/header.png" alt="Imagen de cabecera"></div>
+
+
+  <?php
+  #if($_SESSION["Usuario"]){
+    if(!isset($_SESSION["Usuario"])==null){
+  ?>
+<body>
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+        aria-controls="collapseTwo">
+        <?php
+        if($_SESSION["dn"]!=''){
+          echo "<div style='width:100%;'><center><img style='width:100%;'  src='../img/" . $_SESSION["dn"] . ".png' alt='logo'></center></div>";
+        }
+        ?>
+        <i class="fa fa-folder-open"></i>
+        <center><span>Solicitud de Vacaciones CDT</span></center>
+      </a>
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Opciones:</h6>
+        <a class="collapse-item" href="RegistroUS.html">Registro Ultima Solicitud</a>
+        <a class="collapse-item" href="h-personal.html">Historial de Solicitudes</a>
+        <a class="collapse-item" href="print.html">Volver</a>
+      </div>
+    </div>
+  </li>
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+
+        <div class="container col-sm-12">
+          <div class="form-group row">
+            <div class="col-sm-5">
+              <h1 class="h3 mb-4 text-gray-800">Solicitud de Vacaciones.</h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-2">
+              <?php
+              echo "Usuario: ".$_SESSION["Usuario"]."<br>";
+              ?>
+            </div>
+            <div class="col-sm-2">
+              <?php
+              echo "Cuenta: ".$_SESSION["TipoDeCuenta"]."<br>";
+              ?>
+            </div>
+            <div class="col-sm-2">
+              <?php
+              echo "Area: ".$_SESSION["Area"];
+              ?>
+              <?php
+              echo "<a href='../php/CierraSession.php'>Cierra sesión</a>";
+              ?>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+
+
+
+            <form name="frm_solicitud" id="frm_entradas" method="POST" action="../consultas/registrar.php" enctype="multipart/form-data" >
+
+              <div class="container col-sm-12">
+                <div class="form-group row">
+
+                  <span id="count" class="count"></span>
+
+                  <div class="container col-sm-12">
+                    <div class="form-group row">
+                  <div class="col-sm-2">
+                    <label for="s_expediente"><strong>Expediente:</strong></label>
+                    <input class="form-control" type="number" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #000000; background-color: #FEF9E7" min="0" name="id_expediente" id="id_expediente" onchange="buscar(this.value)" required>
+                    <div name="resultados" id="resultados"></div>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="s_fingreso"><strong>Fecha de Ingreso:</strong></label>
+                    <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: Black;"  name="s_fingreso" id="s_fingreso" readonly>
+                    <div name="resultados" id="resultados"></div>
+                  </div>
+
+                  <div class="col-sm-4">
+                    <label for="s_antiguedad"><strong>Antigüedad:</strong></label>
+                    <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: Black;"  name="s_antiguedad" id="s_antiguedad" readonly>
+                  </div>
+                  <div class="col-sm-2" style="white-space:nowrap">
+                    <label for="s_dcpp"><strong>Días por periodo:</strong></label>
+                    <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: Black;"  name="s_dcpp" id="s_dcpp" readonly>
+                </div>
+                <div class="col-sm-2" style="white-space:nowrap">
+                  <label  class="nowrap" for="s_dd"><strong>Días de Descanso:</strong></label>
+                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: Black;"  name="s_dc" id="s_dc" readonly>
+                </div>
+                <div id="txtHint"></div>
+                    </div>
+                  <div class="container col-sm-12">
+                    <div class="form-group row">
+                  <div class="col-sm-6">
+                    <label for="s_nombre"><strong>Nombre:</strong></label>
+                    <input class="form-control" type="text" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="s_nombrec" id="s_nombrec" readonly>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label for="s_categoria"><strong>Categoria</strong></label>
+                    <input class="form-control" type="text" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="s_categoria" id="s_categoria" readonly>
+                  </div>
+
+                  <div class="container col-sm-12">
+                    <div class="form-group row">
+                      <div class="col-sm-3">
+                        <label for="s_pd"><strong>Año</strong></label>
+                        <input class="form-control" type="text"  min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="año" id="año" >
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="s_año"><strong>Periodo</strong></label>
+                        <input class="form-control" type="text"min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="periodo" id="periodo">
+                        </div>
+
+                      <div class="col-sm-3">
+                        <label for="s_ddisponibles"><strong>Días Disponibles</strong></label>
+                        <input class="form-control" type="text" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="s_ddisponibles" id="s_ddisponibles" readonly>
+                      </div>
+
+                      <div class="col-sm-3">
+                        <label for="s_fv"><strong>Fecha vencimiento:</strong></label>
+                        <input class="form-control" type="text" in="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" min="0" name="s_fv" id="s_fv" readonly>
+                      </div>
+</div>
+
+
+                </div>
+
+
+              </div>
+              <div class="container col-sm-12">
+                <div class="form-group row"><br>
+                  <div style="text-align:left; font-size: 15px; border: 1px solid gray;width: 2000px; height: 350px;"><br>
+
+                  <h3>Nueva Solicitud</h3><br>
+              <div class="container col-sm-12">
+                <div class="form-group row"><br>
+
+                  <div class="col-sm-2">
+                    <label><strong>Fecha de Inicio: </strong></label>
+                    <input class="form-control" type="date" style="text.aling:center;font-weight: bold;color: #FF5900;" name="f_init" id="f_init" value="<?php echo date("Y-m-d");?>">
+                  </div>
+
+                  <div class="col-sm-2">
+                    <label><strong>Reanudando el:</strong></label>
+                    <input class="form-control" type="date" style="text.aling:center;font-weight: bold;color: #FF5900;" name="f_reanudar" id="f_reanudar" value="<?php echo date("Y-m-d");?>">
+                  </div>
+
+                  <div class="col-sm-2">
+                    <label><strong>Dias habiles:</strong></label>
+                    <input class="form-control" type="text" style="text.aling:center;font-weight: bold;color: #FF5900;" name="d_solicitados" id="d_solicitados">
+                  </div>
+
+                  <div class="col-sm-2">
+                    <label for="solicitud_motivo"><strong>Motivo:</strong></label><br>
+                    <select name="motivo" id="motivo" style="width:100%;text-align:center;font-weight: bold;">
+                      <option style="width:100%;text-align:center;font-weight: bold;" value="0"></option>
+                      <option style="width:100%;text-align:center;font-weight: bold;" value="Dias a cuenta">Dias a cuenta</option>
+                      <option style="width:100%;text-align:center;font-weight: bold;" value="Reprogramadas">Reprogramadas</option>
+                      <option style="width:100%;text-align:center;font-weight: bold;" value="Adelantadas">Adelantadas</option>
+                    </select><br><br><br>
+                  </div>
+                    <div class="col-sm-12">
+                      <label for="observaciones">Observaciones<strong></strong></label><br>
+                      <textarea name="observaciones" rows="5" cols="150"></textarea>
+                      </div>
+
+
+
+                </div>
+
+</div>
+          </div>
+
+                <div class="col-sm-12"><br>
+                <button type="submit" name="registrar" class="btn btn-success">Guardar</button>
+
+              </div>
+              </div>
+                  <div class="container col-sm-6">
+                    <div class="form-group row">
+
+
+                    </div>
+                  </div>
+
+
+              </form>
+<!--<script>
+  $(document).ready(function () {
+    $("select[name=motivo]").change(function(){
+      //alert($'(select[name=motivo]')val());
+      $('input[name=motivo]').val($this).val());
+    })
+  })
+</script>-->
+
+              <div class="container col-sm-12">
+                <div class="form-group row">
+                  <div class="col-sm-6">
+                  </div>
+                  <div class="col-sm-6">
+                    <form name="frm_adj" id="frm_adj" method="post" action="CargarFicherosEntradas.php" enctype="multipart/form-data">
+
+
+                    </form>
+                  </div>
+                </div><!-- Page Heading col-lg-12 sub row-->
+              </div><!-- Page Heading row -->
+
+
+            </div>
+          </div>
+        </div><!--end container fluid-->
+
+      </div><!--end main content -->
+
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Coordinaci&oacuten de Desarrollo Tecnol&oacutegico</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="login.html">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="../js/sb-admin-2.min.js"></script>
+
+
+<?php
+}else{?>
+  <a href='../php/CierraSession.php'>Inicia Sesión</a>
+  <h1>¡Requiere inicio de sesión!</h1>
+<?php
+}
+?>
+</body>
+
+</html>

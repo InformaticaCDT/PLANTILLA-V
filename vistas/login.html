@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Iniciar Sesión</title>
+  <script src="../js/jquery.1.9.1.min.js"></script>
+  <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/shpwd.js"></script>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<style>
+body {
+  background-image: url('../img/fondo20.png');
+}
+</style>
+<body>
+  <div  style="margin-bottom:-3rem"><img style="width:100%;"  src="../img/Header.png" alt="header"></div>
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <div class="fadeIn first">
+        <img src="../img/logos-01.png" id="icon" alt="User Icon" />
+      </div>
+      <form class="login-form validate-form" id="frmLogin" action="../php/loginSession.php" method="post">
+        <input type="text" id="Usuario" name="Usuario" class="fadeIn second" placeholder="Usuario">
+        <input type="password" id="Password" name="Password" class="fadeIn second" placeholder="Contraseña">
+        <input type="checkbox" onclick="shpwd()">Muestra contraseña
+        <input align="center" type="submit" class="fadeIn fourth" value="Ingresar">
+      </form>
+      <div id="formFooter">
+        <a class="underlineHover" href="#">Coordinación de Desarrollo Tecnológico</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

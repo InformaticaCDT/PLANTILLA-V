@@ -1,0 +1,400 @@
+<?php require_once('../conn/connect.php') ?>
+<?php require_once('../php/GetNLaborables.php') ?>
+<!DOCTYPE html>
+<?php
+session_start();
+?>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CDT</title>
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  <link
+  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+  rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+
+  <style>
+    .my-custom-scrollbar {
+      position: relative;
+      height: 550px;/*Height table StatusOTs*/
+    }
+    .table-wrapper-scroll-y {
+      display: block;
+    }
+    body{
+      padding-top: 0px;
+      padding-bottom: 20px;
+      background-color:  #cfcfcf;
+      background: #FFFFFF;
+      background: -webkit-linear-gradient(to right, #F6FAFF, #F6F9FF);
+      background: linear-gradient(to right, #F6FAFF, #F6F9FF);
+      min-height: 100vh;
+    }
+    .dot{
+      height: 25px;
+      width: 25px;
+      background-color: #4db332;/*Green*/
+      border-radius: 50%;
+      display: inline-block;
+    }
+    th{
+      height: 50px;
+      color: white;
+      text-align: center;
+      vertical-align: bottom;
+      padding-bottom: 1px;
+      padding-left: 1px;
+      padding-right: 1px;
+      background: black;
+    }
+    .table td, th {
+      padding: 1px;
+      vertical-align: left;
+      border-top: 1px solid #dee2e6;
+    }
+    .table {
+      overflow-y: auto;
+      height: 500px;
+      width: 100%;
+      display:block;
+    }
+    .tableFixHead {
+      overflow-y: auto;
+      height: 700px;/*height table body*/
+    }
+    .tableFixHead thead th {
+      position: sticky;
+      top: 0;
+    }
+
+    .tableFixHead th{
+      top: 0px;
+      padding: 1px;
+      height: 50px;/* header height*/
+    }
+    .tableFixHead th.encabezado{
+      top: 0;
+      padding: 1px;
+    }
+    .verticalText{
+      text-align: left;
+      vertical-align: middle;
+      width: 10px;
+      margin: 0px;
+      padding: 0px;
+      padding-left: 1px;
+      padding-right: 1px;
+      padding-top: 1px;
+      white-space: nowrap;
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+    };
+  </style>
+</head>
+<body id="page-top">
+  <div style="width:100%; "><img style="width:100%;"  src="../img/header.png" alt="Imagen de cabecera"></div>
+
+  <?php
+  #if($_SESSION["Usuario"]){
+    if(!isset($_SESSION["Usuario"])==null){
+  ?>
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+        aria-controls="collapseTwo">
+        <?php
+        if($_SESSION["dn"]!=''){
+          echo "<div style='width:100%;'><img style='width:100%;'  src='../img/" . $_SESSION["dn"] . ".png' alt='logo'></div>";
+        }
+        ?>
+        <i class="fa fa-folder-open"></i>
+        <center><span>Solicitud de Vacaciones CDT</span></center>
+      </a>
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Opciones:</h6>
+        <a class="collapse-item" href="NuevaSolicitud.html">Nueva solicitud</a>
+        <a class="collapse-item" href="historial.html">Historial</a>
+        <a class="collapse-item" href="solicitudes.html">Solicitudes</a>
+        <a class="collapse-item" href="h-personal.html">H. S. Trabajador</a>
+        <a class="collapse-item" href="vigencia.html">Vigencia</a>
+      </div>
+    </div>
+  </li>
+  <!-- Sidebar Toggler (Sidebar) -->
+  <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  </div>
+</ul>
+<!-- End of Sidebar -->
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+  <!-- Main Content -->
+  <div id="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+      <!-- Page Heading -->
+      <div class="container col-sm-12">
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <h1 class="h3 mb-4 text-gray-800">Historial de Solicitudes.</h1>
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Usuario: ".$_SESSION["Usuario"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Cuenta: ".$_SESSION["TipoDeCuenta"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Area: ".$_SESSION["Area"];
+            ?>
+            <?php
+            echo "<a href='CierraSession.php'>Cierra sesión</a>";
+            ?>
+          </div>
+        </div>
+      </div>
+      <form>
+      <div class="row">
+        <div class="col-lg-12">
+          <!-------------------------------------------------------------------------------->
+
+            <table class="table table-bordered table-strped mb-0 table-wrapper-scroll-y my-custom-scrollbar">
+              <thead>
+                <tr>
+
+                  <th colspan="1"><strong><p class="text-dark">Num. Solicitud</p></strong></th>
+                  <th colspan="1"><strong><p class="text-dark">Fecha de Solicitud</p></strong></th>
+                  <th><strong><p class="text-dark">Expediente</p></strong></th>
+                  <th><strong><p class="text-dark">Nombre Completo</p></strong></th>
+                  <th><strong><p class="text-dark">Año</p></strong></th>
+                  <th><strong><p class="text-dark">Periodo (1er/2do)</p></strong></th>
+                  <th colspan="1"><strong><p class="text-dark">Inicio: </p></strong></th>
+                  <th><strong><p class="text-dark">Reanudando: </p></strong></th>
+                  <th><strong><p class="text-dark">Días Habiles </p></strong></th>
+                  <th><strong><p class="text-dark">Firma CDT  </p></strong></th>
+                  <th><strong><p class="text-dark">Firma GINP </p></strong></th>
+                  <th><strong><p class="text-dark">Oficio </p></strong></th>
+                  <th><strong><p class="text-dark">Acuse Entregado</p></strong></th>
+                  <th><strong><p class="text-dark">Cambiar Estatus de Solicitud </p></strong></th>
+                </tr>
+                <tr>
+                  <td class="text-center">1</td>
+                  <td  class="text-center" style = "white-space: nowrap">08-12-2021</td>
+                  <td class="text-center">31325</td>
+                  <td class="text-center" style = "white-space: nowrap">JOSE LOPEZ HERNANDEZ</td>
+                  <td class="text-center">2021</td>
+                  <td  class="text-center" style = "white-space: nowrap">PRIMER PERIODO</td>
+                  <td  class="text-center" style = "white-space: nowrap">24-Diciembre-2021</td>
+                  <td  class="text-center" style = "white-space: nowrap">10-Enero-2022</td>
+                  <td class="text-center" >11</td>
+                  <td><center><label><input type="checkbox" id="f_cdt" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                  <td><center><label><input type="checkbox" id="f_ginp" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                  <td><center><label><input type="checkbox" id="oficio" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                  <td><center><label><input type="checkbox" id="a_entregado" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                  <td><a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Actualizar</a></td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">2</td>
+                    <td class="text-center"  style = "white-space: nowrap">09-11-2021</td>
+                    <td class="text-center">15467</td>
+                    <td class="text-center" style = "white-space: nowrap">LUCINA AGUILAR ESPINOSA</td>
+                    <td class="text-center">2021</td>
+                    <td class="text-center" style = "white-space: nowrap">PRIMER PERIODO</td>
+                    <td  class="text-center" style = "white-space: nowrap">10-Noviembre-2021</td>
+                    <td class="text-center"  style = "white-space: nowrap">11-Noviembre-2021</td>
+                    <td class="text-center">1</td>
+                    <td><center><label><input type="checkbox" id="f_cdt" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                    <td><center><label><input type="checkbox" id="f_ginp" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                    <td><center><label><input type="checkbox" id="oficio" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                    <td><center><label><input type="checkbox" id="a_entregado" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                    <td><a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Actualizar</a></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">3</td>
+                      <td  class="text-center" style = "white-space: nowrap">08-Abril-2021</td>
+                      <td class="text-center">34985</td>
+                      <td  class="text-center" style = "white-space: nowrap">CARLOS JESUS RAMIREZ MARQUEZ</td>
+                      <td class="text-center">2021</td>
+                      <td  class="text-center" style = "white-space: nowrap">SEGUNDO PERIODO</td>
+                      <td  class="text-center" style = "white-space: nowrap">24-Abril-2021</td>
+                      <td  class="text-center" style = "white-space: nowrap">01-Mayo-2021</td>
+                      <td class="text-center">11</td>
+                      <td><center><label><input type="checkbox" id="f_cdt" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                      <td><center><label><input type="checkbox" id="f_ginp" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                      <td><center><label><input type="checkbox" id="oficio" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                      <td><center><label><input type="checkbox" id="a_entregado" value="first_checkbox" style="width:20px;height:20px"></label><br></td>
+                      <td><a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Actualizar</a></td>
+                      </tr>
+
+              </thead>
+              <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center><h5 class="modal-title" id="exampleModalToggleLabel"><strong>Actualización de Estatus en Proceso de Solicitud de Formato de Vacaciones</strong></h5></center>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+            <div class="mb-3">
+              <b><label for="recipient-name" class="col-form-label">Datos:</label><br></b>
+              <h7>Exp:</h7><br>
+              <h7>Nombre:</h7><br>
+              <h7># Solicitud:</h7>
+            </div>
+            <div class="mb-3">
+              <b><label for="message-text" class="col-form-label">Estatus:</label><br></b>
+
+                <fieldset id="f_cdt" style="margin: 10px">
+                  <h7>Firma CDT:  </h7>
+                    <input type="radio" value="f_cdt">SI
+                    <input type="radio" value="f_cdt1">NO
+                </fieldset>
+
+                  <fieldset id="f_ginp" style="margin: 10px" >
+                    <h7>Firma GINP:  </h7>
+                      <input type="radio" value="medium">SI
+                      <input type="radio" value="f_ginp1">NO
+                  </fieldset>
+
+                    <fieldset id="o_tur" style="margin: 10px">
+                        <h7>Oficio Turnado:  </h7>
+                        <input type="radio" value="o_tur">SI
+                        <input type="radio" value="o_tur1">NO
+                    </fieldset>
+
+                      <fieldset id="acuse" style="margin: 10xp">
+                          <h7>Acuse:  </h7>
+                          <input type="radio" value="acuse">SI
+                          <input type="radio" value="acuse1">NO
+                      </fieldset>
+
+
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Validar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong><p class="text-center"><h5 class="modal-title" id="exampleModalToggleLabel2">Confirmar Identidad</h5></p></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Usuario</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text"></div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Confirmar</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+  </body>
+                            <!-------------------------------------------------------------------------------->
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                      <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                          <span>Coordinaci&oacuten de Desarrollo Tecnol&oacutegico</span>
+                        </div>
+                      </div>
+                    </footer>
+                    <!-- End of Footer -->
+                  </div>
+                  <!-- End of Content Wrapper -->
+                </div>
+                <!-- End of Page Wrapper -->
+                <!-- Scroll to Top Button-->
+                <a class="scroll-to-top rounded" href="#page-top">
+                  <i class="fas fa-angle-up"></i>
+                </a>
+                <!-- Logout Modal-->
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                      <a class="btn btn-primary" href="../login.html">Logout</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Bootstrap core JavaScript-->
+              <script src="../vendor/jquery/jquery.min.js"></script>
+              <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+              <!-- Core plugin JavaScript-->
+              <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+              <!-- Custom scripts for all pages-->
+              <script src="../js/sb-admin-2.min.js"></script>
+
+              <?php
+              }else{?>
+                <a href='CierraSession.php'>Inicia Sesión</a>
+                <h1>¡Requiere inicio de sesión!</h1>
+              <?php
+              }
+              ?>
+            </body>
+            </html>

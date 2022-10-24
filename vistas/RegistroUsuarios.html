@@ -1,0 +1,606 @@
+<?php require_once('../conn/connect.php')?>
+
+<!DOCTYPE html>
+<?php
+session_start();
+?>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CDT</title>
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  <link
+  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+  rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+
+  <style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 550px;/*Height table StatusOTs*/
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  body{
+    padding-top: 0px;
+    padding-bottom: 20px;
+    background-color:  #cfcfcf;
+    background: #FFFFFF;
+    background: -webkit-linear-gradient(to right, #F6FAFF, #F6F9FF);
+    background: linear-gradient(to right, #F6FAFF, #F6F9FF);
+    min-height: 100vh;
+  }
+  .dot{
+    height: 25px;
+    width: 25px;
+    background-color: #4db332;/*Green*/
+    border-radius: 50%;
+    display: inline-block;
+  }
+  th{
+    height: 50px;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    background: black;
+  }
+  .table td, th {
+    padding: 1px;
+    vertical-align: left;
+    border-top: 1px solid #dee2e6;
+  }
+  .table {
+    overflow-y: auto;
+    height: 500px;
+    width: 100%;
+    display:block;
+  }
+  .tableFixHead {
+    overflow-y: auto;
+    height: 700px;/*height table body*/
+  }
+  .tableFixHead thead th {
+    position: sticky;
+    top: 0;
+  }
+
+  .tableFixHead th{
+    top: 0px;
+    padding: 1px;
+    height: 50px;/* header height*/
+  }
+  .tableFixHead th.encabezado{
+    top: 0;
+    padding: 1px;
+  }
+  .verticalText{
+    text-align: left;
+    vertical-align: middle;
+    width: 10px;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 1px;
+    white-space: nowrap;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+  };
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  div
+  #content-wrapper {
+    background-image: url('../img/fondo20.png');
+  }
+
+  </style>
+</head>
+
+<script>
+function buscar(str) {
+  if (str=="") {
+    document.getElementById("txtHint").innerHTML="";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("txtHint").innerHTML=this.responseText;
+      /*var table = document.getElementById('mytable_salida');
+      var val0 =table.rows[1].cells[0].innerHTML;
+      document.getElementById("s_fingreso").value = val0;
+      var val1 =table.rows[1].cells[1].innerHTML;
+      document.getElementById("s_antiguedad").value = val1;
+      var val2=table.rows[1].cells[2].innerHTML;
+      document.getElementById("s_dcpp").value = val2;
+      var val3 =table.rows[1].cells[3].innerHTML;
+      document.getElementById("s_dc").value = val3;
+      var val4 =table.rows[1].cells[4].innerHTML;
+      document.getElementById("s_nombrec").value = val4;
+      var val5 =table.rows[1].cells[5].innerHTML;
+      document.getElementById("s_categoria").value = val5;
+      var val6 =table.rows[1].cells[6].innerHTML;
+      document.getElementById("año").value = val6;
+      var val7 =table.rows[1].cells[7].innerHTML;
+      document.getElementById("periodo").value = val7;
+      var val8 =table.rows[1].cells[8].innerHTML;
+      document.getElementById("s_ddisponibles").value = val8;*/
+
+
+
+    }
+  }
+  xmlhttp.open("GET","../php/getots-U.php?q="+str,true);
+  xmlhttp.send();
+}
+</script>
+
+
+<body id="page-top">
+  <div style="width:100%; "><img style="width:100%;"  src="../img/header.png" alt="Imagen de cabecera"></div>
+
+  <?php
+  #if($_SESSION["Usuario"]){
+    if(!isset($_SESSION["Usuario"])==null){
+      ?>
+
+      <!-- Page Wrapper -->
+      <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+          <!-- Nav Item - Pages Collapse Menu -->
+          <li class="nav-item active">
+            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <?php
+            if($_SESSION["dn"]!=''){
+              echo "<div style='width:100%;'><img style='width:100%;'  src='../img/" . $_SESSION["dn"] . ".png' alt='logo'></div>";
+            }
+            ?>
+            <i class="fa fa-folder-open"></i>
+            <center><span>Solicitud de Vacaciones CDT</span></center>
+          </a>
+          <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Opciones:</h6>
+              <a class="collapse-item" href="RegistroTrabajadores.html">Registro de Trabajadores</a>
+              <a class="collapse-item" href="print.html">Volver</a>
+
+            </div>
+          </div>
+        </li>
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+      </ul>
+      <!-- End of Sidebar -->
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="container col-sm-12">
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <p><h1 class="h3 mb-4 text-gray-800">Usuarios</h1></p>
+                </div>
+
+                <div class="col-sm-2">
+                  <?php
+                  echo "Usuario: ".$_SESSION["Usuario"]."<br>";
+                  ?>
+                </div>
+                <div class="col-sm-2">
+                  <?php
+                  echo "Cuenta: ".$_SESSION["TipoDeCuenta"]."<br>";
+                  ?>
+                </div>
+                <div class="col-sm-2">
+                  <?php
+                  echo "Area: ".$_SESSION["Area"];
+                  ?>
+                  <?php
+                  echo "<a href='../php/CierraSession.php'>Cierra sesión</a>";
+                  ?>
+                </div>
+              </div>
+            </div>
+            <!--******BUSCADOR REGISTRO USUARIOS******-->
+            <div class="col-sm-2">
+              <label for="Expediente"><strong>Expediente</strong></label>
+              <label for="info"></label>
+              <input class="form-control" type="text" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #E15919;background-color: #FEF9E7" name="Expediente" id="Expediente" required onchange="buscar(this.value)">
+              <br>
+              <label><strong>Resultados:</strong></label>
+            </div>
+
+            <br><br><br>
+            <div class="col-lg-12" id="txtHint"></div>
+            <!--*****TERMINA BUSCADOR DE USUARIOS*****-->
+
+            <!--INICIA MODAL PARA AGREGAR REGISTROS*****-->
+            <form name="registro-us" id="registro-us" method="POST" action="../consultas/guardarU.php" enctype="multipart/form-data" >
+
+              <div class="row" >
+                <div class="col-md-12">
+                  <div class="col-sm-12" style="text-align:right;">
+                    <h7 style="text-aling:right;"><strong></strong></h7>
+                    <button style="text-alingn:right;" class="btn btn-light" data-bs-target="#agregarU" data-bs-toggle="modal"><img src="../img/usua.png" height ="60" width="60"/>
+                    </div>
+                    <br>
+
+
+                    <!--Inicio modal-->
+                    <div class="modal fade bd-example-modal-lg" id="agregarU" aria-hidden="true" aria-labelledby="agregarU" tabindex="-1">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <!--Inicio de contenido de modal-->
+                        <div class="modal-content">
+                          <!--Cabecera de modal-->
+                          <div class="modal-header">
+                            <p class="bg-success text-success"><h5 class="modal-title w-100 text-center" id="agregarT">Agregar Nuevo Usuario</h5></p>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div><!--Final cabecera de modal-->
+
+                          <!--inicio bodal mody-->
+                          <div class="modal-body">
+                            <div class="mb-12">
+                              <div class="row">
+                                <!--Datos de usuario-->
+                                <label>Datos de Usuario</label><br>
+                                <div class="col-md-8">
+                                  <label for="Nombre"><strong>Nombre:</strong></label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="Nombre" id="Nombre" required  min="1" max="99999" >
+                                </div>
+
+                                <div class="col-md-4">
+                                  <label for="u-area"><strong>Area:</strong></label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="Area" id="Area" required min="1" max="50">
+                                </div>
+                              </div>
+
+                              <br><br><br>
+                              <!--Datos de la cuenta-->
+                              <label>Datos de la Cuenta:</label>
+                              <br>
+                              <div class="row">
+                                <div class="col-md-4">
+                                  <label for="Usuario"><strong>Usuario</strong></label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="Usuario" id="Usuario" required min="1" max="20">
+                                </div>
+
+                                <div class="col-md-4">
+                                  <label for="u-contraseña"><strong>Contraseña</strong></label>
+                                  <input class="form-control" type="password" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF"  name="Password" id="Password" required min="1" max="32">
+                                </div>
+
+                                <div class="col-md-4">
+                                  <label for="u-tipocuenta"><strong>Tipo de Cuenta</strong></label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="TipoDeCuenta" id="TipoDeCuenta" required min="1" max="15">
+
+                                </div>
+                              </div>
+
+                              <br><br>
+
+                              <label>Registro</label>
+                              <div class="row">
+                                <div class="col-md-4">
+                                  <label for="u-registro"><strong>Registro Solicitud</strong></label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="Registro" id="Registro" required min="1" max="20">
+                                </div>
+
+                                <div class="col-md-4">
+                                  <label for="id_usu">Usuario</label>
+                                  <input class="form-control" type="text" style="text-align:center;font-weight: bold;color: #000000; background-color: #F8F8FF" name="id_usu" id="id_usu" required>
+                                </div>
+                              </div>
+                            </div>
+                            <br>
+                            <br>
+
+                            <div class="mb-12">
+                              <div class="d-grid gap-2">
+                                <input type="submit"  name="agregar" class="btn btn-outline-success" value="Agregar">
+                              </div>
+                            </div>
+                          </div>
+                        </div><!--Termino del contenido modal-->
+                      </div>
+
+                    </div>
+                  </div><!--Final modal-->
+                </form>
+                <!--******TERMINA MODAL DE GUARDAR USUARIOS******-->
+
+                <!--******TABLA DE USUARIOS*****-->
+                <?php
+                $sql="SELECT * FROM usuarios";
+                $result=mysqli_query($connect,$sql);
+                ?>
+                <label><strong>Usuarios Existentes:</strong></label>
+                <div class="col-md-12"><!--Tabla de resultados fija-->
+                  <div class="row">
+                    <table class="table.container"  cellpadding="0" cellspacing="0" width="30%">
+                      <thead>
+                        <tr>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Usuario</th>
+                          <th scope="col">Contraseña</th>
+                          <th scope="col">Area</th>
+                          <th scope="col">Tipo de Cuenta</th>
+                          <th scope="col">Registro</th>
+                          <th scope="col">Fecha</th>
+                          <th scope="col">Actualizar</th>
+                          <th scope="col">Eliminar</th>
+                        </tr>
+                      </thead>
+
+
+                      <?php
+                      while($mostrar=mysqli_fetch_array($result)){
+                        ?>
+                        <tbody>
+                          <tr>
+                            <td align="center"><?php echo $mostrar['Nombre'] ?></td>
+                            <td align="center"><?php echo $mostrar['Usuario'] ?></td>
+                            <td align="center"><?php echo $mostrar['Password'] ?></td>
+                            <td  align="center"><?php echo $mostrar['Area'] ?></td>
+                            <td  align="center"><?php echo $mostrar['TipoDeCuenta'] ?></td>
+                            <td  align="center"><?php echo $mostrar['Registro'] ?></td>
+                            <td  align="center"><?php echo $mostrar['Fecha'] ?></td>
+                            <!--<td  align="center"><a class="collapse-item" href="actualizar.php?Id=<?php echo $mostrar['Id'] ?>" class="btn btn-light"><img src="../img/actualizar.png" height ="20" width="20" /></a></th>-->
+                            <td alingn="center"><button type="button" class="btn btn-light" data-toggle="modal" data-target="#actualizar-U" data-whatever="<?php echo $mostrar['Id']; ?>"><img src="../img/actualizar.png" height ="20" width="20" /></button></a></th>
+                            <td alingn="center"><button type="button" class="btn btn-light" data-toggle="modal" data-target="#borrar-U" data-whatever="<?php echo $mostrar['Id']; ?>"><img src="../img/borrar.png" height="20" width="20" /></button></a></th>
+                              <?php
+                            }
+                            ?>
+                          </body>
+                        </table>
+                        <!--******fINALIZA TABLA DE USUARIOS******-->
+
+                        <!--******INICIA MODAL PARA ACTUALIZAR DATOS DE USUARIO******-->
+                        <div class="modal-footer">
+                          <!--Llamado de formulario-->
+
+                          <!--INICIO DE MODAL ACTUALIZAR-->
+                          <!--Inicio modal-->
+                          <div class="modal fade" id="actualizar-U" tabindex="-1" role="dialog" aria-labelledby="actualizar-U">
+                            <div class="modal-dialog" role="document">
+                              <!--Inicio de contenido de modal-->
+                              <div class="modal-content">
+                                <!--Cabecera de modal-->
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <p><h5 class="modal-title w-100 text-center .bg-success" id="actualizar-U">Actualizar datos de Trabajador</h5></p>
+                                </div><!--Final cabecera de modal-->
+                                <!--Inicio body-modal-->
+                                <!--body personal information-->
+                                <div class="modal-body">
+                                  <div class="mb-12">
+                                    <div class="row">
+                                      <!--Datos de Ingreso Inicio-->
+
+
+
+                                      <div class="mb-12">
+                                        <div class="row">
+                                          <div id="resultados" name="resultados"></div>
+                                        </div>
+                                      </div>
+
+                                    </div><!--Termino del contenido modal-->
+                                  </div>
+
+                                </form>
+                                <!--******Termina modal de ACTUALIZAR******-->
+                                <script>
+                                $(document).ready(function() {
+
+                                  $('#actualizar-U').on('show.bs.modal', function(event) {
+                                    var button = $(event.relatedTarget) // Button that triggered the modal
+                                    recipient = button.data('whatever') // Extract info from data-* attributes
+
+                                    $.ajax({
+                                      type: 'POST',
+                                      url: '../php/buscador_usuario.php',
+                                      data: ('search='+recipient),
+                                      success: function(resp){
+                                        if(resp!=""){
+                                          $('#resultados').html(resp);
+                                        }
+                                      }
+                                    })
+                                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                                    var modal = $(this)
+                                    modal.find('.modal-title').text('Actualizar Datos del Usuario:  ' + recipient)
+                                    modal.find('.modal-body input').val(recipient)
+
+
+                                  })
+
+                                  $('#modalSubmit').on('click', function() {
+                                    $('*[data-whatever="' + recipient + '"]').append("<div>this one")
+
+
+                                  })
+
+
+
+
+                                });
+                                </script>
+                                <!--******INICIA MODAL PARA ELIMINAR DATOS DEL USUARIO******-->
+                                <div class="modal-footer">
+                                  <!--Llamado de formulario-->
+
+                                  <!--INICIO DE MODAL ACTUALIZAR-->
+                                  <!--Inicio modal-->
+                                  <div class="modal fade" id="borrar-U" tabindex="-1" role="dialog" aria-labelledby="borrar-U">
+                                    <div class="modal-dialog" role="document">
+                                      <!--Inicio de contenido de modal-->
+                                      <div class="modal-content">
+                                        <!--Cabecera de modal-->
+                                        <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                          <p><h5 class="modal-title w-100 text-center .bg-success" id="borrar-U">Eliminar Personal</h5></p>
+                                        </div><!--Final cabecera de modal-->
+                                        <!--Inicio body-modal-->
+                                        <!--body personal information-->
+                                        <div class="modal-body">
+                                          <div class="mb-12">
+                                            <div class="row">
+                                              <!--Datos de Ingreso Inicio-->
+
+
+
+                                              <div class="mb-12">
+                                                <div class="row">
+                                                  <div id="resultados" name="resultados"></div>
+                                                </div>
+                                              </div>
+
+                                            </div><!--Termino del contenido modal-->
+                                          </div>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                                        <!--******Termina modal de ACTUALIZAR******-->
+
+
+
+                                                    <!--******DELETET****** -->
+                                                    <script>
+                                                    $(document).ready(function() {
+
+                                                      $('#borrar-U').on('show.bs.modal', function(event) {
+                                                        var button = $(event.relatedTarget) // Button that triggered the modal
+                                                        recipient = button.data('whatever') // Extract info from data-* attributes
+
+                                                        $.ajax({
+                                                          type: 'POST',
+                                                          url: '../php/buscador_deleteT.php',
+                                                          data: ('search='+recipient),
+                                                          success: function(resp){
+                                                            if(resp!=""){
+                                                              $('#resultados1').html(resp);
+                                                            }
+                                                          }
+                                                        })
+                                                        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                                                        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                                                        var modal = $(this)
+                                                        modal.find('.modal-title').text('Borrar Registro de: ' + recipient)
+                                                        modal.find('.modal-body input').val(recipient)
+
+
+                                                      })
+
+                                                      $('#modalSubmit').on('click', function() {
+                                                        $('*[data-whatever="' + recipient + '"]').append("<div>this one")
+
+
+                                                      })
+
+
+
+
+                                                    });
+                                                    </script>
+
+                              </body>
+                              <!-------------------------------------------------------------------------------->
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                      <!-- Footer -->
+                      <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                          <div class="copyright text-center my-auto">
+                            <span>Coordinaci&oacuten de Desarrollo Tecnol&oacutegico</span>
+                          </div>
+                        </div>
+                      </footer>
+                      <!-- End of Footer -->
+                    </div>
+                    <!-- End of Content Wrapper -->
+                  </div>
+                  <!-- End of Page Wrapper -->
+                  <!-- Scroll to Top Button-->
+                  <a class="scroll-to-top rounded" href="#page-top">
+                    <i class="fas fa-angle-up"></i>
+                  </a>
+                  <!-- Logout Modal-->
+                  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                      <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Bootstrap core JavaScript-->
+                <script src="../vendor/jquery/jquery.min.js"></script>
+                <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                <!-- Core plugin JavaScript-->
+                <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+                <!-- Custom scripts for all pages-->
+                <script src="../js/sb-admin-2.min.js"></script>
+
+                <?php
+              }else{?>
+                <a href='../php/CierraSession.php'>Inicia Sesión</a>
+                <h1>¡Requiere inicio de sesión!</h1>
+                <?php
+              }
+              ?>
+
+            </body>
+            </html>

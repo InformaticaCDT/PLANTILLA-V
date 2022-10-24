@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<?php
+session_start();
+?>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Plantilla Ejemplo</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+  rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <style>
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  /*table, td, th {
+    border: 1px solid #154360;
+    padding: 5px;
+}*/
+
+select {
+        width: 100%;
+        margin: 0px;
+        height: 50%;
+    }
+    select:focus {
+        min-width: 150px;
+        width: 100%;
+    }
+
+
+  </style>
+  </head>
+  <body id="page-top">
+    <div style="width:100%; "><img style="width:100%;"  src="../img/header.png" alt="Imagen de cabecera"></div>
+
+
+    <?php
+    #if($_SESSION["Usuario"]){
+      if(!isset($_SESSION["Usuario"])==null){
+    ?>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+
+
+      <!-- Sidebar -->
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item active">
+          <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+          aria-controls="collapseTwo">
+          <?php
+          if($_SESSION["dn"]!=''){
+            echo "<div style='width:100%;'><center><img style='width:100%;'  src='../img/" . $_SESSION["dn"] . ".png' alt='logo'></center></div>";
+          }
+          ?>
+          <i class="fa fa-folder-open"></i>
+          <center><span>Solicitud de Vacaciones CDT</span></center>
+        </a>
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Opciones:</h6>
+          <a class="collapse-item" href="NuevaSolicitud.html">Nueva solicitud</a>
+          <a class="collapse-item" href="GenerarSolicitud.html">Generar solicitud</a>
+          <a class="collapse-item" href="historial.html">Historial</a>
+          <a class="collapse-item" href="solicitudes.html">Solicitudes</a>
+          <a class="collapse-item" href="h-personal.html">H. S. Trabajador</a>
+          <a class="collapse-item" href="vigencia.html">Vigencia</a>
+        </div>
+      </div>
+    </li>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- End of Sidebar -->
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Page Heading -->
+
+      <div class="container col-sm-12">
+        <div class="form-group row">
+          <div class="col-sm-5">
+            <h1 class="h3 mb-4 text-gray-800">Oficios de entrada / Nuevo registro.</h1>
+          </div>
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Usuario: ".$_SESSION["Usuario"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Cuenta: ".$_SESSION["TipoDeCuenta"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Area: ".$_SESSION["Area"];
+            ?>
+            <?php
+            echo "<a href='CierraSession.php'>Cierra sesión</a>";
+            ?>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <script>
+          function getConsecutivo() {
+            if (window.XMLHttpRequest) {
+              // code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp = new XMLHttpRequest();
+            } else {
+              // code for IE6, IE5
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+                var table = document.getElementById('mytable');
+                var val0 =table.rows[1].cells[0].innerHTML;
+                document.getElementById("FolioCdt_entradas_n").value = parseInt(val0)+1;
+              }
+            };
+            xmlhttp.open("GET","getn.php",true);
+            xmlhttp.send();
+          }
+          </script>
+          <table summary="Los grupos de música punk más famosos del Reino Unido">
+          <caption>Un resumen de los grupos de música punk más famosos del Reino Unido</caption>
+          <thead>
+            <tr>
+              <th scope="col">Grupo</th>
+              <th scope="col">Año de formación</th>
+              <th scope="col">Número de álbumes</th>
+              <th scope="col">Canción más conocida</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Buzzcocks</th>
+              <td>1976</td>
+              <td>9</td>
+              <td>Ever fallen in love (with someone you shouldn't've)</td>
+            </tr>
+            <tr>
+              <th scope="row">The Clash</th>
+              <td>1976</td>
+              <td>6</td>
+              <td>London Calling</td>
+            </tr>
+
+              ... se han eliminado algunas filas por abreviar
+
+            <tr>
+              <th scope="row">The Stranglers</th>
+              <td>1974</td>
+              <td>17</td>
+              <td>No More Heroes</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="2">Número total de álbumes</th>
+              <td colspan="2">77</td>
+            </tr>
+          </tfoot>
+        </table>  </div>
+      </div><!-- Page Heading col-lg-12 sub row-->
+    </div><!-- Page Heading row -->
+
+
+  </div>
+</div>
+</div><!--end container fluid-->
+
+</div><!--end main content -->
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+  <div class="container my-auto">
+    <div class="copyright text-center my-auto">
+      <span>Coordinaci&oacuten de Desarrollo Tecnol&oacutegico</span>
+    </div>
+  </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+<i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+<div class="modal-footer">
+  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+  <a class="btn btn-primary" href="../login.html">Logout</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="../js/sb-admin-2.min.js"></script>
+
+
+<?php
+}else{?>
+<a href='CierraSession.php'>Inicia Sesión</a>
+<h1>¡Requiere inicio de sesión!</h1>
+<?php
+}
+?>
+</body>
+
+</html>

@@ -1,0 +1,485 @@
+<?php require_once('../conn/connect.php') ?>
+<?php require_once('GetNLaborables.php') ?>
+<?php require_once('GetNomAreaByDn.php') ?>
+<!DOCTYPE html>
+<?php
+session_start();
+?>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>CDT</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+  rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+  <style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 550px;/*Height table StatusOTs*/
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  body{
+    padding-top: 0px;
+    padding-bottom: 20px;
+    background-color:  #cfcfcf;
+    background: #FFFFFF;
+    background: -webkit-linear-gradient(to right, #F6FAFF, #F6F9FF);
+    background: linear-gradient(to right, #F6FAFF, #F6F9FF);
+    min-height: 100vh;
+  }
+  .dot{
+    height: 25px;
+    width: 25px;
+    background-color: #4db332;/*Green*/
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  th{
+    height: 50px;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    background: black;
+  }
+
+
+  .table td, th {
+    padding: 1px;
+    vertical-align: left;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .table {
+    overflow-y: auto;
+    height: 500px;
+    width: 100%;
+    display:block;
+  }
+
+  .tableFixHead {
+    overflow-y: auto;
+    height: 700px;/*height table body*/
+  }
+  .tableFixHead thead th {
+    position: sticky;
+    top: 0;
+  }
+
+  .tableFixHead th{
+    top: 0px;
+    padding: 1px;
+    height: 50px;/* header height*/
+  }
+  .tableFixHead th.encabezado{
+    top: 0;
+    padding: 1px;
+  }
+  .verticalText{
+    text-align: left;
+    vertical-align: middle;
+    width: 10px;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 1px;
+    white-space: nowrap;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+  };
+
+  </style>
+
+</head>
+
+<body id="page-top">
+  <?php
+  $FolioCdtSalida = isset($_GET['FolioCdtSalida']) ? $_GET['FolioCdtSalida'] : '';
+
+  $_SESSION["FolioCdtSalidaEdicion"]=$FolioCdtSalida;
+
+  $query = "SELECT * FROM cdts_salidas WHERE FolioCdtSalida='$FolioCdtSalida'";
+  $resultado=$connect->query($query);
+  $fila = mysqli_fetch_assoc($resultado);
+  $total = mysqli_num_rows($resultado);
+  ?>
+  <div style="width:100%; "><img style="width:100%;"  src="../img/header.png" alt="Imagen de cabecera"></div>
+
+  <?php
+  #if($_SESSION["Usuario"]){
+    if(!isset($_SESSION["Usuario"])==null){
+  ?>
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+        aria-controls="collapseTwo">
+        <?php
+        if($_SESSION["dn"]!=''){
+          echo "<div style='width:100%;'><img style='width:100%;'  src='../img/" . $_SESSION["dn"] . ".png' alt='logo'></div>";
+        }
+        ?>
+        <i class="fa fa-folder-open"></i>
+        <span>Oficios CDT</span>
+      </a>
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Opciones:</h6>
+        <a class="collapse-item" href="alta.html">Nuevo Oficio</a>
+        <a class="collapse-item" href="ots_turn_ua.html">Oficios turnados</a>
+        <a class="collapse-item" href="ots_resp_dns.html">Revisar respuestas</a>
+        <a class="collapse-item" href="ots_turn_dn.html">Oficios turnados a la UA</a>
+        <a class="collapse-item" href="CdtsDisponibles.html"><i class='fas fa-solid fa-recycle fa-lg' style="color:Green;"></i> Reutilizar Folios de entrada</a>
+        <a class="collapse-item" href="AsignCDTSalida.html">Folios de SALIDA</a>
+        <a class="collapse-item" href="eventos.html">Movimientos realizados</a>
+        <a class="collapse-item" href="graficaOTsAreas.html">Gráficas</a>
+        <a class="collapse-item" href="ua_docs_ofic.html">Formatos actualizados</a>
+        <a class="collapse-item" href="sesiones.html">Gestión de usuarios</a>
+      </div>
+    </div>
+  </li>
+  <!-- Sidebar Toggler (Sidebar) -->
+  <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  </div>
+
+</ul>
+<!-- End of Sidebar -->
+
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+  <!-- Main Content -->
+
+
+  <div id="content">
+
+
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+      <!-- Page Heading -->
+      <div class="container col-sm-12">
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <h1 class="h3 mb-4 text-gray-800">Registro de Folios de Salida.</h1>
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Usuario: ".$_SESSION["Usuario"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Cuenta: ".$_SESSION["TipoDeCuenta"]."<br>";
+            ?>
+          </div>
+          <div class="col-sm-2">
+            <?php
+            echo "Area: ".$_SESSION["Area"];
+            ?>
+            <?php
+            echo "<a href='CierraSession.php'>Cierra sesión</a>";
+            ?>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-lg-12">
+          <!-------------------------------------------------------------------------------->
+
+
+          <form name="frm_cdt_salidasEdicion" id="frm_cdt_salidasEdicion" method="POST" action="registro_cdt_salidasEdicion.php" enctype="multipart/form-data">
+            <div class="container col-sm-12">
+              <div class="form-group row">
+                <div class="col-sm-2">
+                  <label for="cdt_salidas"><strong>Folio de salida</strong></label>
+                  <input class="form-control" type="number" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" name="cdt_salidas" id="cdt_salidas" value="<?php echo $fila['FolioCdtSalida'];?>">
+                  <input id="IdFolioCdtSalida" name="IdFolioCdtSalida" type="hidden" value="<?php echo $fila['Id'];?>">
+                </div>
+
+
+
+
+                <div class="col-sm-4">
+                  <label for="solicita_salidas"><strong>Solicita:</strong></label>
+                  <input class="form-control text-uppercase" type="text" data-toggle="tooltip" data-placement="bottom" maxlength="50" title="Longitud máxima 50 caracteres." style="text-align:center;font-weight: bold;color: #E15919;background-color: #FEF9E7" name="solicita_salidas" id="solicita_salidas" value="<?php echo utf8_encode($fila['Solicita']);?>" required>
+                </div>
+                <div class="col-sm-4">
+                  <label for="dirigido_a_salidas"><strong>Dirigido:</strong></label>
+                  <input class="form-control text-uppercase" type="text" data-toggle="tooltip" data-placement="bottom" maxlength="100" title="Longitud máxima 100 caracteres." style="text-align:center;font-weight: bold;color: #E15919;background-color: #FEF9E7" name="dirigido_a_salidas" id="dirigido_a_salidas" value="<?php echo utf8_encode($fila['Dirigido_a']);?>" required>
+                </div>
+                <div class="col-sm-2">
+                  <label for="otorga_salidas"><strong>Otorga:</strong></label>
+                  <div class="form-group">
+                    <select class="selectpicker form-control" name="otorga_salidas" id="otorga_salidas">
+                      <option value="UA"<?php if($fila['Otorga'] == 'UA'): ?> selected="selected"<?php endif; ?>>UA</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container col-sm-12">
+              <div class="form-group row">
+                <div class="col-sm-2">
+                  <label for="responde_a_cdt_salidas"><strong>Responde al Folio CDT</strong></label>
+                  <input class="form-control" type="number" min="0" max="99999" maxlength="5" style="text-align:center;font-weight: bold;color: #25668B;" name="responde_a_cdt_salidas" id="responde_a_cdt_salidas" value="<?php echo $fila['FolioCdt'];?>">
+                </div>
+                <div class="col-sm-4">
+                  <label for="firma_salidas"><strong>Firma:</strong></label>
+                  <div class="form-group">
+                    <select class="selectpicker form-control" name="firma_salidas" id="firma_salidas">
+                      <option value="DIDT"<?php if($fila['Firma'] == 'DIDT'): ?> selected="selected"<?php endif; ?>>DIDT</option>
+                      <option value="GINP"<?php if($fila['Firma'] == 'GINP'): ?> selected="selected"<?php endif; ?>>GINP</option>
+                      <option value="CDT"<?php if($fila['Firma'] == 'CDT'): ?> selected="selected"<?php endif; ?>>CDT</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="asunto_salidas"><strong>Asunto:</strong></label>
+                  <textarea class="form-control text-uppercase" name="asunto_salidas" id="asunto_salidas" rows="1" margin-left="0px" data-toggle="tooltip" data-placement="bottom" title="Longitud máxima 250 caracteres." maxlength="250"><?php echo utf8_encode($fila['Asunto']);?></textarea>
+                </div>
+                <div class="col-sm-2"><br>
+                  <input class="btn btn-primary" type="submit" value="Guardar" style="width: 100%;">
+                </div>
+              </div>
+
+            </div>
+
+            <?php
+            $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'desc' ? 'DESC' : 'ASC';
+            #echo "sort order ini:".$sort_order."<br>";
+            $sort_order = $sort_order == 'ASC' ? 'desc' : 'asc';
+            #echo "sort order fin:".$sort_order."<br>";
+
+            if (isset($_GET['sort'])) {
+              $column = trim(strip_tags($_GET['sort']));
+              $orderby = "ORDER BY $column $sort_order";
+            } else {
+              #$orderby = "";
+              $orderby = "ORDER BY Fecha DESC";
+            }
+            #echo "column:".$orderby."<br>";
+            ?>
+
+            <?php
+            #Query ots
+            $consulta = "SELECT * FROM cdts_salidas ".$orderby;
+            $resultado = $connect->query($consulta);
+            $fila = mysqli_fetch_assoc($resultado);
+            $total = mysqli_num_rows($resultado);
+            if($total==0){
+              echo "<h3>No existen registros.</h3>";
+            }
+            ?>
+            <?php if ($total>0) { ?>
+
+              <div id="ots" class="container-fluid col-sm-12">
+                <div class="form-group">
+
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <h5>Total registros: <?php echo $total; ?></h5>
+
+                      <div class="tableFixHead">
+                        <colgroup>
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                          <col width="2%"><col width="2%"><col width="2%"><col width="2%"><col width="2%">
+                        </colgroup>
+                        <!--TMP<h5>Total de registro de OTs en el área <?php echo $AreaCdt; ?>: <?php echo $total; ?></h5>-->
+
+                        <table width="100%" border="1" >
+                          <thead>
+                            <tr>
+                              <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Fecha&order=<?php echo $sort_order; ?>">Fecha</th>
+                                <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=FolioCdtSalida&order=<?php echo $sort_order; ?>">CDT Salida</th>
+                                  <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=FolioCdtSalida&order=<?php echo $sort_order; ?>">Adjunto</th>
+                                  <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=FolioCdt&order=<?php echo $sort_order; ?>">Contesta OT de la CDT</th>
+                                  <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Solicita&order=<?php echo $sort_order; ?>">Solicita</th>
+                                    <th colspan=1 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Otorga&order=<?php echo $sort_order; ?>">Otorga</th>
+                                      <th colspan=5 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Dirigido_a&order=<?php echo $sort_order; ?>">Dirigido a</th>
+                                        <th colspan=5 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Firma&order=<?php echo $sort_order; ?>">Firma</th>
+                                            <th colspan=17 style="text-align: center;" bgcolor="#5D7B9D">Asunto</th>
+                                            <th colspan=3 style="text-align: center;" bgcolor="#5D7B9D"><a href="AsignCDTSalida.html?sort=Usuario&order=<?php echo $sort_order; ?>">Registró</th>
+                                              <th colspan=2 style="text-align: center;word-break:break;" bgcolor="#5D7B9D">Editar</th>
+                                              <th colspan=2 style="text-align: center;word-break:break;" bgcolor="#5D7B9D">Eliminar Folio</th>
+                                            </tr>
+                                          </thead>
+                          <tbody class="tableFixHead text-uppercase">
+                            <?php do { ?>
+                              <tr>
+
+
+
+                                <?php
+                                echo "<td colspan=3 style='text-align:center;' nowrap>".$fila['Fecha']."</td>";
+                                echo "<td colspan=3 style='text-align:center;' nowrap>".$fila['FolioCdtSalida']."</td>";
+
+
+
+                                #Crea carpeta si no existe, caso contrario lista contenido.
+                                if (!file_exists("../docs/AcusesFoliosSalidas/".$fila['FolioCdtSalida']."/")) {
+                                  mkdir("../docs/AcusesFoliosSalidas/".$fila['FolioCdtSalida']."/", 0777, true);
+                                }
+                                $archivos = scandir("../docs/AcusesFoliosSalidas/".$fila['FolioCdtSalida']."/");
+                                $n=count($archivos)-2;
+                                if ($n>0) {
+                                  echo "<td colspan=3 style='text-align:center;'><a href='../php/ua_acuses_salida.html?FolioCdtSalida=".$fila['FolioCdtSalida']."#toolbar=0'>".$n." <i class='fas fa-paperclip'></i></td>";
+                                  } else {
+                                    #echo "<td colspan=3></td>";
+                                    echo "<td colspan=3 style='text-align:center;'><a href='../php/ua_acuses_salida.html?FolioCdtSalida=".$fila['FolioCdtSalida']."#toolbar=0'>".$n." <i class='fas fa-paperclip'></i></td>";
+                                  }
+
+
+
+                                echo "<td colspan=3 style='text-align:center;'>".$fila['FolioCdt']."</td>";
+                                echo "<td colspan=3 style='text-align:center;'>".utf8_encode($fila['Solicita'])."</td>";
+                                echo "<td colspan=1 style='text-align:center;'>".$fila['Otorga']."</td>";
+                                echo "<td colspan=5 style='text-align:center;'>".utf8_encode($fila['Dirigido_a'])."</td>";
+                                echo "<td colspan=5 style='text-align:center;'>".utf8_encode($fila['Firma'])."</td>";
+                                echo "<td colspan=17 style='text-align:justify;'>".utf8_encode($fila['Asunto'])."</td>";
+                                echo "<td colspan=3 style='text-align:center;'>".$fila['Usuario']."</td>";
+                                echo "<td colspan=2 style='text-align:center;'><a href='../php/AsignCDTSalida_edicion.html?FolioCdtSalida=" . $fila['FolioCdtSalida'] . "&Id=" . $fila['Id'] . "#toolbar=0' style='color: Green; font-size:22px;'><i class='fas fa-solid fa-recycle'></i></td>";
+                                  ?>
+                                  <td colspan=2 style="text-align: center;"><a title="Eliminar Folio CDT de SALIDA" href="EliminaFolioCdt_salida.html?FolioCdtSalida=<?php echo $fila['FolioCdtSalida']; ?>" style="color: red; font-size:22px;" onclick="return confirm('Esta seguro de eliminar el Folio CDT <?php echo $fila['FolioCdtSalida']; ?>?');"> <i class="far fa-trash-alt"></i></span> </a></td>
+
+                                </tr>
+                              <?php } while ($fila=mysqli_fetch_assoc($resultado)); ?>
+
+
+                            <?php }//Total >0
+                            elseif ($total>0) echo '';
+                            else echo '';
+                            ?>
+                          </tbody>
+                        </table>
+                      </div><!-- Table responsive -->
+
+
+
+                                  </form>
+                                </div><!-- col sm 12 -->
+                              </div><!-- row -->
+                            </div><!-- form group row -->
+                          </div><!-- container-fluid -->
+
+
+                          <!-------------------------------------------------------------------------------->
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+
+                  <!-- Footer -->
+                  <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                      <div class="copyright text-center my-auto">
+                        <span>Coordinaci&oacuten de Desarrollo Tecnol&oacutegico</span>
+                      </div>
+                    </div>
+                  </footer>
+                  <!-- End of Footer -->
+
+                </div>
+                <!-- End of Content Wrapper -->
+
+              </div>
+              <!-- End of Page Wrapper -->
+
+              <!-- Scroll to Top Button-->
+              <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+              </a>
+
+              <!-- Logout Modal-->
+              <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="../login.html">Logout</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../vendor/jquery/jquery.min.js"></script>
+            <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+            <!-- Core plugin JavaScript-->
+            <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+            <!-- Custom scripts for all pages-->
+            <script src="../js/sb-admin-2.min.js"></script>
+
+            <?php
+            }else{?>
+              <a href='CierraSession.php'>Inicia Sesión</a>
+              <h1>¡Requiere inicio de sesión!</h1>
+            <?php
+            }
+            ?>
+          </body>
+
+          </html>
